@@ -14,7 +14,7 @@ while line:
     # 截取列表里面的字段以及要更换的字段
     i,j=line.split(",")[0],line.split(",")[1].replace('\n','')
     # print(i,j)
-    # 判断，如果不存在的文件夹，可以跳过并记录导出到lost.txt
+    # 判断，如果不存在的文件夹，可以跳过并记录导出到lost.txt.
     if os.path.exists(i):
         os.rename(i,j)
     else:
