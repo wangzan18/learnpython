@@ -12,3 +12,6 @@ Zabbix 监控系统微信报警脚本
 
 ## dingding_text.py
 Zabbix 监控系统钉钉报警脚本
+
+## mysql_strutrue.py
+查询mysql的表，并且查询出表结构
