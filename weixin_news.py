@@ -1,55 +1,40 @@
-#!/usr/bin/python
-#coding:utf-8
+# -*- coding: UTF-8 -*-
 
-import urllib2
 import json
+import requests
 import sys
-def getMsg(zabbix_msg):
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-    msg = ' '.join(zabbix_msg)
-    msg = msg.split('#')
-    mes="\n".join(msg)
-    return "\n".join(msg)
 
+# 微信公众号上应用的CropID和Secret
+corpid = 'wx8d46d36104988993'
+corpsecret = 'QCjzy2lH2ZB7MUG6uowChyChPsOQw96EB0X0QjofRRt0JePGezTVR4saIw3Ezznh'
+
+def getToken(corpid,corpsecret):
+    # 获取access_token
+    GURL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corpid, corpsecret)
+    # 使用requests.get 函数请求，并把结果转化为json形式，获取token
+    token = requests.get(GURL).json()['access_token']
+    return token
+
+def sendMsg(title,message):
+    # 获取access_token
+    access_token = getToken(corpid,corpsecret)
+    # 消息发送接口
+    Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"  % access_token
+    # 要发送的消息
+    weixin_msg = {
+        "toparty": 2,      # 部门ID
+        "agentid": 4,   # 企业应用的id
+        "msgtype" : "textcard",
+        "textcard": {
+            "title": "领奖通知",
+            "description": "<div class=\"gray\">2016年9月26日</div> <div class=\"normal\">恭喜你抽中iPhone 7一台，领奖码：xxxx</div><div class=\"highlight\">请于2016年10月10日前联系行政同事领取</div>",
+            "url": "URL",
+            "btntxt": "更多"
+        }
+    }
+    # 向消息接口发送消息
+    print(weixin_msg)
+    print(requests.post(Purl,data = weixin_msg,headers = {'content-type': 'charset=utf8'}))
 
 if __name__ == '__main__':
-    #微信公众号上应用的CropID和Secret
-    CropID='wx8d46d36104988993'
-    Secret='QCjzy2lH2ZB7MUG6uowChyChPsOQw96EB0X0QjofRRt0JePGezTVR4saIw3Ezznh'
- 
-    #获取access_token
-    GURL="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (CropID,Secret)
-    result=urllib2.urlopen(urllib2.Request(GURL)).read()
-    dict_result = json.loads(result)
-    dict_result.keys()
-    Gtoken = dict_result['access_token']
-    
-    #生成通过post请求发送消息的url
-    PURL="https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s" % (Gtoken)
-    
-    AppID="4"                        #企业号中的应用id
-#    UserID=2                       #部门成员id，zabbix中定义的微信接收者
-    PartyID="2"                      #部门id，定义了范围，组内成员都可接收到消息
-
-    #生成post请求信息
-    post_data = {}
-    textcard = {}
-    textcard['description'] = getMsg(sys.argv[2:])
-    textcard['title'] = getMsg(sys.argv[1:2])
-    textcard['url'] = "www.wzlinux.com"
-    textcard['btntxt'] = "请点击"
-
-    #post_data['touser'] = UserID
-    post_data['toparty'] = PartyID
-    post_data['msgtype'] = 'textcard'
-    post_data['agentid'] = AppID
-    post_data['textcard'] = textcard
-    #由于字典格式不能被识别，需要转换成json然后在作post请求
-    #注：如果要发送的消息内容有中文的话，第三个参数一点要设为False
-    json_post_data = json.dumps(post_data,False,False)
-    #print(articles['title'])
-    #通过urllib2.urlopen()方法发送post请求
-    request_post = urllib2.urlopen(PURL, json_post_data)
-    #read()方法查看请求的返回结果
-    print request_post.read()
+    sendMsg(1,2)
