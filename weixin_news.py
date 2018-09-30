@@ -26,9 +26,9 @@ def sendMsg(title,message):
         "agentid": '4',   # 企业应用的id
         "msgtype" : "textcard",
         "textcard": {
-            "title": "领奖通知",
-            "description": "<div class=\"gray\">2016年9月26日</div> <div class=\"normal\">恭喜你抽中iPhone 7一台，领奖码：xxxx</div><div class=\"highlight\">请于2016年10月10日前联系行政同事领取</div>",
-            "url": "URL",
+            "title": title,
+            "description": message,
+            "url": "www.wzlinux.com",
             "btntxt": "更多"
         }
     }
@@ -36,4 +36,7 @@ def sendMsg(title,message):
     print(requests.post(Purl,data = json.dumps(weixin_msg)).content)
 
 if __name__ == '__main__':
-    sendMsg(1,2)
+    # 向脚本传参title和message
+    title = sys.argv[1]
+    message = sys.argv[2]
+    sendMsg(title,message)
