@@ -22,8 +22,8 @@ def sendMsg(title,message):
     Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"  % access_token
     # 要发送的消息
     weixin_msg = {
-        "toparty": 2,      # 部门ID
-        "agentid": 4,   # 企业应用的id
+        "toparty": '2',      # 部门ID
+        "agentid": '4',   # 企业应用的id
         "msgtype" : "textcard",
         "textcard": {
             "title": "领奖通知",
@@ -33,8 +33,7 @@ def sendMsg(title,message):
         }
     }
     # 向消息接口发送消息
-    print(weixin_msg)
-    print(requests.post(Purl,data = weixin_msg,headers = {'content-type': 'charset=utf8'}))
+    print(requests.post(Purl,data = json.dumps(weixin_msg)).content)
 
 if __name__ == '__main__':
     sendMsg(1,2)
