@@ -1,4 +1,8 @@
+#!/usr/bin/python3.6
 # -*- coding: UTF-8 -*-
+
+# wangzan18@126.com
+# 2018-09-30
 
 import json
 import requests
