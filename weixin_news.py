@@ -37,7 +37,7 @@ def sendMsg(title,message):
         }
     }
     # 向消息接口发送消息
-    print(requests.post(Purl,data = json.dumps(weixin_msg)).content)
+    print(requests.post(Purl,data = json.dumps(weixin_msg),headers={'Content-Type': 'application/json;charset=utf-8'}).content)
 
 if __name__ == '__main__':
     # 向脚本传参title和message
