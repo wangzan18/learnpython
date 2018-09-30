@@ -1,21 +1,24 @@
-#!/usr/bin/python
+#!/usr/bin/python3.6
 # -*- coding: utf-8 -*-
 
 import requests
 import json
 import sys
-import os
 
 headers = {'Content-Type': 'application/json;charset=utf-8'}
 
-api_url = "https://oapi.dingtalk.com/robot/send?access_token=19f597062cfbbfc9de27fd5c80667e18eef094e6cbc5ab8552ec05de731d2c17"
+# 获取群机器人接口
+api_url = "https://oapi.dingtalk.com/robot/send?access_token=787ff7bd0e71074e297bd7853fad956a6dc3ef5a82150548acd1c0b9de13fb26"
 
-def msg(text):
 
+def msg(title,text):
+    # 接口消息类型，具体可以查看官方接口文档
     json_text= {
-     "msgtype": "text",
-        "text": {
-            "content": text
+     "msgtype": "link",
+        "link": {
+            "title" : title,
+            "text": text,
+            "messageUrl" : "http://www.huijifen.cn"
         },
         "at": {
             "atMobiles": [
@@ -24,9 +27,10 @@ def msg(text):
             "isAtAll": False
         }
     }
-
-    print requests.post(api_url,json.dumps(json_text),headers=headers).content
+    # 向接口发送数据，并返回处理结果
+    print(requests.post(api_url,json.dumps(json_text),headers=headers).content)
 
 if __name__ == '__main__':
-    text = sys.argv[1]
-    msg(text)
+    title = sys.argv[1]
+    text = sys.argv[2]
+    msg(title,text)
