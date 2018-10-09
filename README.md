@@ -15,3 +15,12 @@ Zabbix 监控系统钉钉报警脚本
 
 ## mysql_strutrue.py
 查询mysql的表，并且查询出表结构
+
+## hjf_oracle_wechat
+查询Oracle数据库用户信息，并通过微信通知给相关用户
+
+## pachong_xiaohua.py
+通过爬虫，爬取校花网视频
+
+## dmp_mongodb.py
+python程序连接mongodb数据库
