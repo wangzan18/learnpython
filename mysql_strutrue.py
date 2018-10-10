@@ -60,9 +60,7 @@ msg(rr1)
     # 打印每一个字段
     # for field in rr1:
     #     print(field)
-
-
-
+   
 # 数据库连接和游标的关闭
 conn.close()
 cursor.close()
