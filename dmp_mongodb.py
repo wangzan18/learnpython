@@ -3,7 +3,12 @@
 
 import pymongo
 
-myclient = pymongo.MongoClient("mongodb://dmp:dmp@10.0.1.26:27017/dmp")
-mydb = myclient["dmp"]
-mycol = mydb["dmp"]
-print(mycol)
+# 创建连接对象以及对数据库权限认证
+conn = pymongo.MongoClient("mongodb://dmp1:dmp1pass@10.0.1.26:27017/dmp")
+# 选择数据库dmp
+db = conn['dmp']
+# 选择集合dmp_user_center
+col = db['dmp_user_center']
+# 获取集合中第一个文档
+x = col.find_one()
+print(x)
