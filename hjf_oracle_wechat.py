@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3.6
 # -*- coding: UTF-8 -*-
 
 # wangzan18@126.com
@@ -9,8 +9,11 @@ import requests
 import cx_Oracle
 import datetime
 
+# 微信公众号上应用的CropID和Secret
+corpid = 'wx8d46d36104988993'
+corpsecret = 'QCjzy2lH2ZB7MUG6uowChyChPsOQw96EB0X0QjofRRt0JePGezTVR4saIw3Ezznh'
 
-
+# 获取数据库数据
 def hjf_zhuce():
     # 创建一个数据库连接
     conn = cx_Oracle.connect('test/comratings@10.0.2.64:1521/unicode')
@@ -25,10 +28,7 @@ def hjf_zhuce():
     one = cursor.fetchone()
     return one
 
-# 微信公众号上应用的CropID和Secret
-corpid = 'wx8d46d36104988993'
-corpsecret = 'LjA7c3IvXkJeJksbGCUFi1tnou0h0C7Jc6oecSsCoWw4pDXuGsocKYywu4IC7ZLz'
-
+# 获取微信接口token
 def getToken(corpid,corpsecret):
     # 获取access_token
     GURL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corpid, corpsecret)
@@ -36,6 +36,8 @@ def getToken(corpid,corpsecret):
     token = requests.get(GURL).json()['access_token']
     return token
 
+
+# 向接口发送消息
 def sendMsg(title,message):
     # 获取access_token
     access_token = getToken(corpid,corpsecret)
@@ -43,8 +45,8 @@ def sendMsg(title,message):
     Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"  % access_token
     # 要发送的消息
     weixin_msg = {
-        "toparty": '3',      # 部门ID
-        "agentid": '7',   # 企业应用的id
+        "toparty": '2',      # 部门ID
+        "agentid": '4',   # 企业应用的id
         "msgtype" : "textcard",
         "textcard": {
             "title": title,
@@ -59,5 +61,5 @@ def sendMsg(title,message):
 if __name__ == '__main__':
     # 向脚本传参title和message
     title = "惠积分用户信息通知"
-    message = "【创数科技】截止" + str(datetime.date.today()) + "日惠积分总累计用户" + str(hjf_zhuce()[0]) + "，昨日新增人数" + str(hjf_zhuce()[1]) + "，昨日签到人数" + str(hjf_zhuce()[2])
+    message = "截止到" + str(datetime.date.today()) + "日\n惠积分总注册用户：" + str(hjf_zhuce()[0]) + "人\n昨日新增人数：" + str(hjf_zhuce()[1]) + "人\n昨日签到人数：" + str(hjf_zhuce()[2]) + "人\n【创数科技】"
     sendMsg(title,message)
