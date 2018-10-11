@@ -27,7 +27,7 @@ def sendMsg(title,message):
     # 要发送的消息
     weixin_msg = {
         "toparty": '2',      # 部门ID
-        "agentid": '4',   # 企业应用的id
+        "agentid": '4',      # 企业应用的id
         "msgtype" : "textcard",
         "textcard": {
             "title": title,

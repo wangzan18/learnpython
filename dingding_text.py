@@ -34,6 +34,6 @@ def msg(title,text):
     print(requests.post(api_url,json.dumps(json_text),headers=headers).content)
 
 if __name__ == '__main__':
-    title = sys.argv[1]
+    title = sys.argv[1]   # 获取传递的第一个参数
     text = sys.argv[2]
     msg(title,text)
