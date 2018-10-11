@@ -60,6 +60,7 @@ def sendMsg(title,message):
 
 if __name__ == '__main__':
     # 向脚本传参title和message
+    x,y,z = hjf_zhuce()
     title = "惠积分用户信息通知"
-    message = "截止到%s日\n惠积分总注册用户：%d人\n昨日新增人数：%d人\n昨日签到人数：%d人\n【创数科技】" % ( datetime.date.today(),hjf_zhuce()[0],hjf_zhuce()[1],hjf_zhuce()[2])
+    message = "截止到%s日\n惠积分总注册用户：%d人\n昨日新增人数：%d人\n昨日签到人数：%d人\n【创数科技】" % ( datetime.date.today(),x,y,z)
     sendMsg(title,message)
