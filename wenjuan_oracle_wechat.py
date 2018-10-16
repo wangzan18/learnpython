@@ -20,7 +20,7 @@ def get_fujiapijiu():
     # 建立游标
     cursor = conn.cursor()
     # 执行sql语句
-    cursor.execute("""select '福佳啤酒项目' as 项目名,A.allcount as 现在总完成数,B.allvisit as 总访问数,c.yestvisit as 昨天访问数,d.dvisit as 配额满,e.cvisit  as 完成,f.svisit as 甄别 from 
+    cursor.execute("""select A.allcount,B.allvisit,c.yestvisit,d.dvisit,e.cvisit,f.svisit from 
 (select count(distinct(comuid)) as allcount from T_PROJECT t where t.pid='XS3007' and menu='C')  A,
 (select count(distinct(comuid)) as allvisit from T_PROJECT t where t.pid='XS3007' and status='10')  B,
 (select count(distinct(comuid)) as yestvisit from T_PROJECT t where t.pid='XS3007' and status='10' and  trunc(CREATE_TIME)=trunc(sysdate-1))  C,
@@ -38,7 +38,7 @@ def get_MiKailLuo():
     # 建立游标
     cursor = conn.cursor()
     # 执行sql语句
-    cursor.execute("""select '米凯罗啤酒' as 项目名,A.allcount as 现在总完成数,B.allvisit as 总访问数,c.yestvisit as 昨天访问数,d.dvisit as 配额满,e.cvisit  as 完成,f.svisit as 甄别 from 
+    cursor.execute("""select A.allcount ,B.allvisit ,c.yestvisit ,d.dvisit ,e.cvisit ,f.svisit  from 
 (select count(distinct(comuid)) as allcount from T_PROJECT t where t.pid='XS3008' and menu='C')  A,
 (select count(distinct(comuid)) as allvisit from T_PROJECT t where t.pid='XS3008' and status='10')  B,
 (select count(distinct(comuid)) as yestvisit from T_PROJECT t where t.pid='XS3008' and status='10' and  trunc(CREATE_TIME)=trunc(sysdate-1))  C,
@@ -56,7 +56,7 @@ def get_haerbincontrol():
     # 建立游标
     cursor = conn.cursor()
     # 执行sql语句
-    cursor.execute("""select '哈尔滨啤酒控制组' as 项目名,A.allcount as 现在总完成数,B.allvisit as 总访问数,c.yestvisit as 昨天访问数,d.dvisit as 配额满,e.cvisit  as 完成,f.svisit as 甄别 from 
+    cursor.execute("""select  A.allcount ,B.allvisit ,c.yestvisit ,d.dvisit ,e.cvisit,f.svisit from 
 (select count(distinct(comuid)) as allcount from T_PROJECT t where t.pid='XS3003' and menu='C')  A,
 (select count(distinct(comuid)) as allvisit from T_PROJECT t where t.pid='XS3003' and status='10')  B,
 (select count(distinct(comuid)) as yestvisit from T_PROJECT t where t.pid='XS3003' and status='10' and  trunc(CREATE_TIME)=trunc(sysdate-1))  C,
@@ -74,7 +74,7 @@ def get_haerbinexpose():
     # 建立游标
     cursor = conn.cursor()
     # 执行sql语句
-    cursor.execute("""select '哈尔滨啤酒曝光组' as 项目名,A.allcount as 现在总完成数,B.allvisit as 总访问数,c.yestvisit as 昨天访问数,d.dvisit as 配额满,e.cvisit  as 完成,f.svisit as 甄别 from 
+    cursor.execute("""select A.allcount,B.allvisit,c.yestvisit,d.dvisit,e.cvisit,f.svisit from 
 (select count(distinct(comuid)) as allcount from T_PROJECT t where t.pid='XS3031' and menu='C')  A,
 (select count(distinct(comuid)) as allvisit from T_PROJECT t where t.pid='XS3031' and status='10')  B,
 (select count(distinct(comuid)) as yestvisit from T_PROJECT t where t.pid='XS3031' and status='10' and  trunc(CREATE_TIME)=trunc(sysdate-1))  C,
@@ -102,27 +102,29 @@ def sendMsg(title,message):
     Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"  % access_token
     # 要发送的消息
     weixin_msg = {
-        "toparty": '7',      # 部门ID
+        "toparty": '2',      # 部门ID
         "agentid": '1000005',   # 企业应用的id
         "msgtype" : "textcard",
         "textcard": {
             "title": title,
-            "description": message
+            "description": message,
+            "url": "www.wzlinux.com",
+            "btntxt": "更多"
         }
     }
     # 向消息接口发送消息
     print(requests.post(Purl,data = json.dumps(weixin_msg),headers={'Content-Type': 'application/json;charset=utf-8'}).content)
 
-def send_pijiu(wenjuan_data):
-    x,a,b,c,d,e,f = wenjuan_data
+def send_pijiu(x,wenjuan_data):
+    a,b,c,d,e,f = wenjuan_data
     title = x
     message = "截止到%s日\n总完成数：%d\n总访问数：%d\n昨日访问数：%d\n配额满：%d\n完成：%d\n甄别：%d" % ( datetime.date.today(),a,b,c,d,e,f)
     sendMsg(title,message)
 
 
 if __name__ == '__main__':
-    send_pijiu(get_MiKailLuo())
-    send_pijiu(get_fujiapijiu())
-    send_pijiu(get_haerbincontrol())
-    send_pijiu(get_haerbinexpose())
+    send_pijiu('米凯罗啤酒',get_MiKailLuo())
+    send_pijiu('福佳啤酒',get_fujiapijiu())
+    send_pijiu('哈尔滨啤酒控制组',get_haerbincontrol())
+    send_pijiu('哈尔滨啤酒曝光组',get_haerbinexpose())
 
