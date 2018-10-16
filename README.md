@@ -27,3 +27,6 @@ Zabbix 监控系统钉钉报警脚本
 
 # 8、dmp_mongodb.py
 python程序连接mongodb数据库
+
+# 9、wenjuan_oracle_wechat.py
+通过查询文件等数据，oracle数据库，然后发送给微信
