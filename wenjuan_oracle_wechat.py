@@ -102,14 +102,12 @@ def sendMsg(title,message):
     Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"  % access_token
     # 要发送的消息
     weixin_msg = {
-        "toparty": '2',      # 部门ID
+        "toparty": '7',      # 部门ID
         "agentid": '1000005',   # 企业应用的id
         "msgtype" : "textcard",
         "textcard": {
             "title": title,
-            "description": message,
-            "url": "www.wzlinux.com",
-            "btntxt": "更多"
+            "description": message
         }
     }
     # 向消息接口发送消息
