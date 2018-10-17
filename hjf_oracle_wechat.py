@@ -26,6 +26,8 @@ def hjf_zhuce():
    ( select count(1) as yesterDaySignCount from m_usersign where trunc(signtime)=trunc(sysdate-1)) C""")
 
     one = cursor.fetchone()
+    conn.close()
+    cursor.close()
     return one
 
 # 获取微信接口token
