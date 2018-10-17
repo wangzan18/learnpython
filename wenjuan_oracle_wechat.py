@@ -37,8 +37,8 @@ def get_wenjuan(project_num):
 (select count(distinct(comuid)) as svisit from T_PROJECT t where t.pid='%s' and menu='S') F""" % (project_num,project_num,project_num,project_num,project_num,project_num))
 
     one = cursor.fetchone()
-    conn.close()
     cursor.close()
+    conn.close()
     return one
 
 # 获取微信接口token
@@ -70,16 +70,15 @@ def sendMsg(title,message):
     # 向消息接口发送消息
     print(requests.post(Purl,data = json.dumps(weixin_msg),headers={'Content-Type': 'application/json;charset=utf-8'}).content)
 
-def send_pijiu(x,wenjuan_data):
+def send_wenjuan(x,wenjuan_data):
     a,b,c,d,e,f = wenjuan_data
     title = x
     message = "截止到%s日\n总完成数：%d\n总访问数：%d\n昨日访问数：%d\n配额满：%d\n完成：%d\n甄别：%d" % ( datetime.date.today(),a,b,c,d,e,f)
     sendMsg(title,message)
 
-
 if __name__ == '__main__':
-    send_pijiu('米凯罗啤酒',get_wenjuan(mikailuo))
-    send_pijiu('福佳啤酒',get_wenjuan(fujia))
-    send_pijiu('哈尔滨啤酒控制组',get_wenjuan(haerbin_control))
-    send_pijiu('哈尔滨啤酒曝光组',get_wenjuan(haerbin_expose))
+    send_wenjuan('米凯罗啤酒',get_wenjuan(mikailuo))
+    send_wenjuan('福佳啤酒',get_wenjuan(fujia))
+    send_wenjuan('哈尔滨啤酒控制组',get_wenjuan(haerbin_control))
+    send_wenjuan('哈尔滨啤酒曝光组',get_wenjuan(haerbin_expose))
 

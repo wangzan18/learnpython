@@ -12,3 +12,4 @@ col = db['dmp_user_center']
 # 获取集合中第一个文档
 x = col.find_one()
 print(x)
+conn.close()

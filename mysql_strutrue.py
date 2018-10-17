@@ -62,5 +62,5 @@ msg(rr1)
     #     print(field)
    
 # 数据库连接和游标的关闭
-conn.close()
 cursor.close()
+conn.close()
