@@ -12,6 +12,7 @@ import datetime
 # 微信公众号上应用的CropID和Secret
 corpid = 'wx8d46d36104988993'
 corpsecret = 'fm2SOjoOGI8HrOb2n3S1r4OE9G5R52I1aGWFnVpTd-E'
+headers = {'Content-Type': 'application/json;charset=utf-8'}
 # 各项目组编号
 fujia = 'XS3007'
 mikailuo = 'XS3008'
@@ -76,7 +77,7 @@ def sendMsg(title,message):
         }
     }
     # 向消息接口发送消息
-    print(requests.post(Purl,data = json.dumps(weixin_msg),headers={'Content-Type': 'application/json;charset=utf-8'}).content)
+    print(requests.post(Purl,data = json.dumps(weixin_msg),headers=headers ).content)
 
 def send_wenjuan(x,all,wenjuan_data):
     a,b,c,d,e,f = wenjuan_data
