@@ -19,7 +19,7 @@ haerbin_control = 'XS3003'
 haerbin_expose = 'XS3031'
 
 # 获取问卷项目数据
-def get_wenjuan(project_num):
+def get_wenjuan(project_id):
     # 创建一个数据库连接
     try:
         conn = cx_Oracle.connect('survey/xunshi2018survey@10.0.1.26:1521/orcl')
@@ -28,17 +28,25 @@ def get_wenjuan(project_num):
     # 建立游标
     cursor = conn.cursor()
     # 执行sql语句
-    cursor.execute("""select A.allcount,B.allvisit,c.yestvisit,d.dvisit,e.cvisit,f.svisit from 
-(select count(distinct(comuid)) as allcount from T_PROJECT t where t.pid='%s' and menu='C')  A,
-(select count(distinct(comuid)) as allvisit from T_PROJECT t where t.pid='%s' and status='10')  B,
-(select count(distinct(comuid)) as yestvisit from T_PROJECT t where t.pid='%s' and status='10' and  trunc(CREATE_TIME)=trunc(sysdate-1))  C,
-(select count(distinct(comuid)) as dvisit from T_PROJECT t where t.pid='%s' and menu='Q') D,
-(select count(distinct(comuid)) as cvisit from T_PROJECT t where t.pid='%s' and menu='C') E,
-(select count(distinct(comuid)) as svisit from T_PROJECT t where t.pid='%s' and menu='S') F""" % (project_num,project_num,project_num,project_num,project_num,project_num))
+    cursor.execute("""select menu, count(distinct(comuid))
+  from T_PROJECT t
+ where t.pid = '%s'
+ group by menu
+ order by menu""" % project_id)
 
-    one = cursor.fetchone()
+    one = cursor.fetchall()
+
+    cursor.execute("""select menu, count(distinct(comuid))
+  from T_PROJECT t
+ where t.pid = '%s'
+   and trunc(CREATE_TIME) = trunc(sysdate - 1)
+ group by menu
+ order by menu""" % project_id)
+    two = cursor.fetchall()
     cursor.close()
     conn.close()
+    one.append(two[0])
+    one.append(two[3])
     return one
 
 # 获取微信接口token
@@ -70,15 +78,22 @@ def sendMsg(title,message):
     # 向消息接口发送消息
     print(requests.post(Purl,data = json.dumps(weixin_msg),headers={'Content-Type': 'application/json;charset=utf-8'}).content)
 
-def send_wenjuan(x,wenjuan_data):
+def send_wenjuan(x,all,wenjuan_data):
     a,b,c,d,e,f = wenjuan_data
     title = x
-    message = "截止到%s日\n总完成数：%d\n总访问数：%d\n昨日访问数：%d\n配额满：%d\n完成：%d\n甄别：%d" % ( datetime.date.today(),a,b,c,d,e,f)
+    message = "截止到%s日\n" \
+              "总目标数：%d\n" \
+              "总完成数：%d\n" \
+              "差额：%d\n" \
+              "总配额满：%d\n" \
+              "总甄别数：%d\n" \
+              "昨日完成：%d\n" \
+              "昨日访问：%d" % ( datetime.date.today(),all,a[1],all - a[1],b[1],c[1],e[1],f[1])
     sendMsg(title,message)
 
 if __name__ == '__main__':
-    send_wenjuan('米凯罗啤酒',get_wenjuan(mikailuo))
-    send_wenjuan('福佳啤酒',get_wenjuan(fujia))
-    send_wenjuan('哈尔滨啤酒控制组',get_wenjuan(haerbin_control))
-    send_wenjuan('哈尔滨啤酒曝光组',get_wenjuan(haerbin_expose))
+    send_wenjuan('米凯罗啤酒',250,get_wenjuan(mikailuo))
+    send_wenjuan('福佳啤酒',1000,get_wenjuan(fujia))
+    send_wenjuan('哈尔滨啤酒控制组',200,get_wenjuan(haerbin_control))
+    send_wenjuan('哈尔滨啤酒曝光组',200,get_wenjuan(haerbin_expose))
 
