@@ -50,8 +50,7 @@ def get_data(project_id):
     two = cursor.fetchall()
     cursor.close()
     conn.close()
-    one.append(two[0])
-    one.append(two[3])
+    one.extend([two[0], two[3]])
     return one
 
 
