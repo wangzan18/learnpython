@@ -1,5 +1,8 @@
+#!/usr/bin/python3.6
 # -*- coding: UTF-8 -*-
+
 # wangzan18@126.com
+# 2018-10-16
 
 import pymongo
 
