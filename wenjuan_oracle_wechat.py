@@ -19,16 +19,20 @@ mikailuo = 'XS3008'
 haerbin_control = 'XS3003'
 haerbin_expose = 'XS3031'
 
-# 获取问卷项目数据
-def get_wenjuan(project_id):
-    # 创建一个数据库连接
+
+def get_data(project_id):
+    """获取数据库需要的内容
+
+    :param project_id: 需要传入的项目id，在程序开始又定义
+    :return: 返回查出的内容
+    """
     try:
-        conn = cx_Oracle.connect('survey/xunshi2018survey@10.0.1.26:1521/orcl')
-    except:
+        conn = cx_Oracle.connect('survey/password@10.0.1.26:1521/orcl')
+    except UnboundLocalError:
         print("无法连接数据库")
-    # 建立游标
+
     cursor = conn.cursor()
-    # 执行sql语句
+
     cursor.execute("""select menu, count(distinct(comuid))
   from T_PROJECT t
  where t.pid = '%s'
@@ -50,25 +54,34 @@ def get_wenjuan(project_id):
     one.append(two[3])
     return one
 
-# 获取微信接口token
-def getToken(corpid,corpsecret):
-    # 获取access_token
-    GURL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corpid, corpsecret)
+
+def get_token(corp_id, corp_secret):
+    """获取微信接口token
+
+    :param corp_id: 企业的id
+    :param corp_secret: 应用的secret
+    :return: 返回获取到的token
+    """
+    url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corp_id, corp_secret)
     # 使用requests.get 函数请求，并把结果转化为json形式，获取token
-    token = requests.get(GURL).json()['access_token']
+    token = requests.get(url).json()['access_token']
     return token
 
-# 向接口发送消息
-def sendMsg(title,message):
-    # 获取access_token
-    access_token = getToken(corpid,corpsecret)
-    # 消息发送接口
-    Purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"  % access_token
-    # 要发送的消息
-    weixin_msg = {
-        "toparty": '2',      # 部门ID
-        "agentid": '1000005',   # 企业应用的id
-        "msgtype" : "textcard",
+
+def send_msg(title, message):
+    """向接口发送消息函数
+
+    :param title: 消息的标题
+    :param message: 消息的内容
+    """
+    access_token = get_token(corpid, corpsecret)
+
+    purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s" % access_token
+
+    wechat_msg = {
+        "toparty": '2',  # 部门ID
+        "agentid": '1000005',  # 企业应用的id
+        "msgtype": "textcard",
         "textcard": {
             "title": title,
             "description": message,
@@ -77,10 +90,17 @@ def sendMsg(title,message):
         }
     }
     # 向消息接口发送消息
-    print(requests.post(Purl,data = json.dumps(weixin_msg),headers=headers ).content)
+    print(requests.post(purl, data=json.dumps(wechat_msg), headers=headers).content)
 
-def send_wenjuan(x,all,wenjuan_data):
-    a,b,c,d,e,f = wenjuan_data
+
+def send_wenjuan(x, all, data):
+    """制定要给微信发送的消息
+
+    :param x: 为消息的标题内容，即项目内容
+    :param all: 当前项目目标数，向相关人员获取
+    :param data: 函数get_data，数据库查询出来的数据，是列表形式。
+    """
+    a, b, c, d, e, f = data
     title = x
     message = "截止到%s日\n" \
               "总目标数：%d\n" \
@@ -89,12 +109,12 @@ def send_wenjuan(x,all,wenjuan_data):
               "总配额满：%d\n" \
               "总甄别数：%d\n" \
               "昨日完成：%d\n" \
-              "昨日访问：%d" % ( datetime.date.today(),all,a[1],all - a[1],b[1],c[1],e[1],f[1])
-    sendMsg(title,message)
+              "昨日访问：%d" % (datetime.date.today(), all, a[1], all - a[1], b[1], c[1], e[1], f[1])
+    send_msg(title, message)
+
 
 if __name__ == '__main__':
-    send_wenjuan('米凯罗啤酒',250,get_wenjuan(mikailuo))
-    send_wenjuan('福佳啤酒',1000,get_wenjuan(fujia))
-    send_wenjuan('哈尔滨啤酒控制组',200,get_wenjuan(haerbin_control))
-    send_wenjuan('哈尔滨啤酒曝光组',200,get_wenjuan(haerbin_expose))
-
+    send_wenjuan('米凯罗啤酒', 250, get_data(mikailuo))
+    send_wenjuan('福佳啤酒', 1000, get_data(fujia))
+    send_wenjuan('哈尔滨啤酒控制组', 200, get_data(haerbin_control))
+    send_wenjuan('哈尔滨啤酒曝光组', 200, get_data(haerbin_expose))
