@@ -1,25 +1,33 @@
+#!/usr/bin/python3.6
+# -*- coding: UTF-8 -*-
+
+# wangzan18@126.com
+# 2018-10-16
+
 import os
 
 # 图片存储目录
-path='C:\\Users\\Water\\Downloads\\vivo\\'
+path = 'C:\\Users\\Water\\Downloads\\vivo\\'
 
-# 打开列表
-f = open(path+"file.csv","r")
-f1= open(path+'lost.txt','w')
-# 读取文件第一行
+
+f = open(path+"file.csv", "r")
+f1 = open(path+'lost.txt', 'w')
+
 line = f.readline()
+
+# 循环查找，修改目录名称
 while line:
-    # 切换到照片目录
+
     os.chdir(path)
-    # 截取列表里面的字段以及要更换的字段
-    i,j=line.split(",")[0],line.split(",")[1].replace('\n','')
-    # print(i,j)
-    # 判断，如果不存在的文件夹，可以跳过并记录导出到lost.txt
+
+    i, j = line.split(",")[0], line.split(",")[1].replace('\n', '')
+
     if os.path.exists(i):
-        os.rename(i,j)
+        os.rename(i, j)
     else:
-        f1.write(i+","+j+"\n")
+        f1.write(i+"," + j + "\n")
     line = f.readline()
+
 # 关闭文件
 f.close()
 f1.close()
