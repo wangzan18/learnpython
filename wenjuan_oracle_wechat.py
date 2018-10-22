@@ -27,7 +27,7 @@ def get_data(project_id):
     :return: 返回查出的内容
     """
     try:
-        conn = cx_Oracle.connect('survey/xunshi2018survey@10.0.1.26:1521/orcl')
+        conn = cx_Oracle.connect('survey/password@10.0.1.26:1521/orcl')
     except UnboundLocalError:
         print("无法连接数据库")
 
