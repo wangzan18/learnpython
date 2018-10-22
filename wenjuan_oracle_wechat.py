@@ -27,7 +27,7 @@ def get_data(project_id):
     :return: 返回查出的内容
     """
     try:
-        conn = cx_Oracle.connect('survey/password@10.0.1.26:1521/orcl')
+        conn = cx_Oracle.connect('survey/xunshi2018survey@10.0.1.26:1521/orcl')
     except UnboundLocalError:
         print("无法连接数据库")
 
@@ -40,18 +40,25 @@ def get_data(project_id):
  order by menu""" % project_id)
 
     one = cursor.fetchall()
+    dict_one = dict(one)
 
-    cursor.execute("""select menu, count(distinct(comuid))
+    cursor.execute(""" select count(distinct(comuid))
   from T_PROJECT t
- where t.pid = '%s'
-   and trunc(CREATE_TIME) = trunc(sysdate - 1)
- group by menu
- order by menu""" % project_id)
+ where t.pid = '%s' and menu = 'C'
+   and trunc(CREATE_TIME) = trunc(sysdate - 1)""" % project_id)
+
     two = cursor.fetchall()
+
+    cursor.execute(""" select count(distinct(comuid))
+      from T_PROJECT t
+     where t.pid = '%s' and status = '10'
+       and trunc(CREATE_TIME) = trunc(sysdate - 1)""" % project_id)
+
+    three = cursor.fetchall()
+
     cursor.close()
     conn.close()
-    one.extend([two[0], two[3]])
-    return one
+    return dict_one, two, three
 
 
 def get_token(corp_id, corp_secret):
@@ -99,7 +106,7 @@ def send_wenjuan(x, all, data):
     :param all: 当前项目目标数，向相关人员获取
     :param data: 函数get_data，数据库查询出来的数据，是列表形式。
     """
-    a, b, c, d, e, f = data
+    a, b, c = data
     title = x
     message = "截止到%s日\n" \
               "总目标数：%d\n" \
@@ -108,7 +115,7 @@ def send_wenjuan(x, all, data):
               "总配额满：%d\n" \
               "总甄别数：%d\n" \
               "昨日完成：%d\n" \
-              "昨日访问：%d" % (datetime.date.today(), all, a[1], all - a[1], b[1], c[1], e[1], f[1])
+              "昨日访问：%d" % (datetime.date.today(), all, a['C'], all - a['C'], a['Q'], a['S'], b[0][0], c[0][0])
     send_msg(title, message)
 
 
