@@ -7,10 +7,12 @@
 import requests
 import base64
 import urllib
+import os
+import os.path
 
 api_key = "SsZE4DPhmFISxcAEGU3SNM0y"
 secret_key = "8gYUc3aCkBFce70NlEvmOfSVkTLZH3fm"
-pic = "C:\\Users\\Water\\Downloads\\ele.jpg"
+path = 'C:\\Users\\Water\\Downloads\\123\\'
 headers = {'Content-Type', 'application/x-www-form-urlencoded'}
 
 
@@ -27,26 +29,41 @@ def get_token(ak, sk):
     return token
 
 
+def file_path():
+    """获取目录下所有文件路径，返回一个列表
+
+    """
+    file_name = os.listdir(path)
+    file = []
+    for i in file_name:
+        file.append(path + i)
+    return file
+
+
 def get_pic_data():
     """请求接口图片数据
 
     """
     access_token = get_token(api_key, secret_key)
-    url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + access_token
-    # 二进制方式打开图文件
-    f = open(pic, 'rb')
-    # 参数image：图像base64编码
-    img = base64.b64encode(f.read())
-    params = {"image": img}
-    params = urllib.parse.urlencode(params)
-    response_data = requests.post(url, data=params).json()
-    for word in response_data['words_result'][2:]:
-        print(word['words'], end=',')
-    f.close()
+    url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=' + access_token
+    a = open('C:\\Users\\Water\\Downloads\\baidu_api.csv', 'a+')
+    for jpg in file_path():
+        f = open(jpg, 'rb')
+        # 参数image：图像base64编码
+        img = base64.b64encode(f.read())
+        params = {"image": img}
+        params = urllib.parse.urlencode(params)
+        response_data = requests.post(url, data=params).json()
+        a.write(os.path.basename(jpg) + ',')
+        for word in response_data['words_result']:
+            # print(word['words'], end=',')
+            a.write(word['words'] + ',')
+        a.write('\n')
+        f.close()
+    a.close()
 
 
-get_pic_data()
-
-
+if __name__ == '__main__':
+    get_pic_data()
 
 
