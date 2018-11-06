@@ -54,6 +54,7 @@ def get_pic_data():
         params = {"image": img}
         params = urllib.parse.urlencode(params)
         response_data = requests.post(url, data=params).json()
+        print(response_data)
         a.write(os.path.basename(jpg) + ',')
         for word in response_data['words_result']:
             # print(word['words'], end=',')
