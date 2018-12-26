@@ -13,6 +13,8 @@ db = conn['dmp']
 # 选择集合dmp_user_center
 col = db['dmp_user_center']
 # 获取集合中第一个文档
-x = col.find_one()
+doc = col.find({'USER_ID': 'pid423834299957'})
+
+x = [i for i in doc]
 print(x)
 conn.close()

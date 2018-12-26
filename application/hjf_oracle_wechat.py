@@ -42,9 +42,9 @@ def get_token(corpid, corpsecret):
     :param corpsecret: 应用密码串
     :return: 返回获取到的token
     """
-    GURL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corpid, corpsecret)
+    url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corpid, corpsecret)
     # 使用requests.get 函数请求，并把结果转化为json形式，获取token
-    token = requests.get(GURL).json()['access_token']
+    token = requests.get(url).json()['access_token']
     return token
 
 
