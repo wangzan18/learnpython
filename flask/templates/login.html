@@ -5,30 +5,38 @@
     <title>Wechat_login</title>
 </head>
 <body>
-<script>
-        tip = 1
+   <div style="width: 200px;margin: 0 auto">
+        <h1 style="text-align: center">微信登录</h1>
+        <img id="img" style="height: 300px;width: 300px;" src="https://login.weixin.qq.com/qrcode/{{qcode}}" alt="">
+    </div>
+
+    <script src="/static/jquery-1.12.4.js"></script>
+    <script>
+        $(function () {
+            checkLogin();
+        })
+
         function checkLogin() {
             $.ajax({
-                url:'/check_login/',
-                data: {'tip': tip},
-                type: 'GET',
-                dataType: 'JSON',
+                url:'/check_login',
+                type:'GET',
+                dataType:'JSON',
                 success:function (arg) {
-                    if (arg.code == 201){
-                        // 有人扫码了
-                        $('#xcode').attr('src', arg.data);
+                    if(arg.code === 201){
+                        // 扫码
+                        $('#img').attr('src',arg.src);
                         checkLogin();
-                        tip = 0;
-                    }else if (arg.code == 408){
+                    }else if(arg.code === 200){
+                        // 重定向到用户列表
+                        location.href = '/index'
+                    }else{
                         checkLogin();
-                    }else if (arg.code == 200){
-                        window.location.href='/index/'
                     }
+
                 }
             })
         }
-        checkLogin();
+
     </script>
-<img id="xcode" style="width: 400px; height: 400px; margin:100px 40%" src="https://login.weixin.qq.com/qrcode/{{ xcode }}">
 </body>
 </html>

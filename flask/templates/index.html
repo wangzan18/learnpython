@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <title>Title</title>
 </head>
 <body>
-  {{ content }}
+  <h1>欢迎登录：{{user_dict.User.NickName}}</h1>
+    <h3>最近联系人</h3>
+    <ul>
+        {% for user in user_dict.ContactList%}
+        <li>{{user.NickName}}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
