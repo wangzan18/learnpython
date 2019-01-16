@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wechat_login</title>
+</head>
+<body>
+<script>
+        tip = 1
+        function checkLogin() {
+            $.ajax({
+                url:'/check_login/',
+                data: {'tip': tip},
+                type: 'GET',
+                dataType: 'JSON',
+                success:function (arg) {
+                    if (arg.code == 201){
+                        // 有人扫码了
+                        $('#xcode').attr('src', arg.data);
+                        checkLogin();
+                        tip = 0;
+                    }else if (arg.code == 408){
+                        checkLogin();
+                    }else if (arg.code == 200){
+                        window.location.href='/index/'
+                    }
+                }
+            })
+        }
+        checkLogin();
+    </script>
+<img id="xcode" style="width: 400px; height: 400px; margin:100px 40%" src="https://login.weixin.qq.com/qrcode/{{ xcode }}">
+</body>
+</html>

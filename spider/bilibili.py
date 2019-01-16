@@ -78,7 +78,7 @@ def save_db():
 
 
 if __name__ == '__main__':
-    # create_db()
+    create_db()
     print("启动爬虫，开始爬取数据")
     for i in range(4000, 5000):
         begin = 1000 * i
