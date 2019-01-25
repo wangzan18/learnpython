@@ -5,17 +5,16 @@
     <title>Wechat_login</title>
 </head>
 <body>
-   <div style="width: 200px;margin: 0 auto">
+   <div style="width: 300px;margin: 0 auto">
         <h1 style="text-align: center">微信登录</h1>
         <img id="img" style="height: 300px;width: 300px;" src="https://login.weixin.qq.com/qrcode/{{qcode}}" alt="">
-    </div>
+   </div>
 
     <script src="/static/jquery-1.12.4.js"></script>
     <script>
         $(function () {
             checkLogin();
         })
-
         function checkLogin() {
             $.ajax({
                 url:'/check_login',
@@ -32,11 +31,9 @@
                     }else{
                         checkLogin();
                     }
-
                 }
             })
         }
-
     </script>
 </body>
 </html>

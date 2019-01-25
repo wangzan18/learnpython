@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Wechat</title>
 </head>
 <body>
   <h1>欢迎登录：{{user_dict.User.NickName}}</h1>
@@ -10,6 +10,14 @@
     <ul>
         {% for user in user_dict.ContactList%}
         <li>{{user.NickName}}</li>
+        {% endfor %}
+    </ul>
+    <h3>微信订阅号</h3>
+    <ul>
+        {% for sub in user_dict.MPSubscribeMsgList %}
+        {% for artlist in sub.MPArticleList %}
+        <li>{{artlist.Title}}</li>
+        {% endfor %}
         {% endfor %}
     </ul>
 </body>
