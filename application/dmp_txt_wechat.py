@@ -15,9 +15,9 @@ headers = {'Content-Type': 'application/json;charset=utf-8'}
 
 
 def get_data():
-    data = []
-    for line in open("C:\\Users\\Water\\Downloads\\dmp.txt", "r"):
-        data.append(line.strip())
+    data = ""
+    for line in open("C:\\Users\\Water\\Downloads\\dmp.txt", "r", encoding='UTF-8'):
+        data += line.strip() + "\n"
     return data
 
 
@@ -64,19 +64,12 @@ def send_dmp(data):
 
     :param data: 函数get_data，数据库查询出来的数据，是列表形式。
     """
-    a, b, c, d, e, f, g, h = data
-    title = "ComData DMP数据量统计"
+    title = "ComScan DMP数据量统计"
     message = "截止到%s日\n" \
-              "SDK总数：%s\n" \
-              "SDK昨日新增：%s\n" \
-              "quick总数：%s\n"\
-              "quick昨日新增：%s\n" \
-              "vpn总数：%s\n" \
-              "vpn昨日新增：%s\n" \
-              "pc总数：%s\n" \
-              "pc昨日新增：%s\n" % (datetime.date.today(), a, b, c, d, e, f, g, h)
+              "%s\n" % (datetime.date.today(), data)
     send_wechat(title, message)
 
 
 if __name__ == '__main__':
     send_dmp(get_data())
+    print(get_data())
