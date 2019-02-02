@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, jsonify
 import time
 import requests
 import re
+import json
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
@@ -92,5 +93,19 @@ def index():
         return render_template('index.html', user_dict=user_dict)  # 把返回的数据传给index.html
 
 
+@app.route('/contact_all/')
+def contact_all():
+    ticket_dict = session.get('ticket_dict')  # 获取初始化需要的ticket
+    skey = ticket_dict.get('skey')
+    pass_ticket = ticket_dict.get('pass_ticket')
+    base_url = "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?lang=zh_CN&pass_ticket={0}&r={" \
+               "1}&seq=0&skey={2}".format(pass_ticket, time.time() * 1000, skey)
+    r1 = requests.get(base_url, cookies=ticket_dict)
+    contact_dict = json.loads(r1.content)
+    # for item in contact_dict["MemberList"]:
+    #     print(item)
+    return render_template('contact_all.html', contact_dict=contact_dict)
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True)

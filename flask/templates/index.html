@@ -12,13 +12,17 @@
         <li>{{user.NickName}}</li>
         {% endfor %}
     </ul>
+    <a href="/contact_all/" target="_blank">查看更多联系人</a>
     <h3>微信订阅号</h3>
-    <ul>
-        {% for sub in user_dict.MPSubscribeMsgList %}
+    {% for sub in user_dict.MPSubscribeMsgList %}
+    <div>
+        <h3>{{ sub.NickName }}(文章数量：{{ sub.MPArticleCount }})</h3>
+        <ul>
         {% for artlist in sub.MPArticleList %}
-        <li>{{artlist.Title}}</li>
+            <li><a href="{{ artlist.Url }}" target="_blank">{{ artlist.Title }}</a></li>
         {% endfor %}
-        {% endfor %}
-    </ul>
+        </ul>
+    </div>
+    {% endfor %}
 </body>
 </html>
