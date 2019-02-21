@@ -6,12 +6,33 @@
 </head>
 <body>
 <div>
-    <h1>
-        联系人列表
-    </h1>
+    <h1>发送消息</h1>
+    <p>接受者：<input type="text" id="to" /></p>
+    <p>内容：<input type="text" id="content" /></p>
+    <input type="button" id="btn" value="Send" />
+</div>
+<script src="/static/jquery-1.12.4.js"></script>
+<script>
+    $(function() {
+        $('#btn').click(function() {
+            var to = $('#to').val();
+            var content = $('#content').val();
+            $.ajax({
+                url: '/send_msg',
+                type: 'GET',
+                data: {'to': to, 'content': content},
+                success: function(arg) {
+                    console.log(arg)
+                }
+            })
+        })
+    })
+</script>
+<div>
+    <h1>联系人列表</h1>
     <ul>
         {% for item in contact_dict.MemberList %}
-        <li>{{ item.NickName }}</li>
+        <li>{{ item.UserName }} --- {{ item.NickName }}</li>
         {% endfor %}
     </ul>
 </div>

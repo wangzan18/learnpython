@@ -89,6 +89,7 @@ def index():
         init_ret = requests.post(url=init_url, json=data_dict)  # 微信登录初始化
         init_ret.encoding = 'utf-8'
         user_dict = init_ret.json()  # 储存返回的json数据
+        session['current_user_info'] = user_dict['User']
         # print(user_dict['ContactList'])
         return render_template('index.html', user_dict=user_dict)  # 把返回的数据传给index.html
 
@@ -98,8 +99,8 @@ def contact_all():
     ticket_dict = session.get('ticket_dict')  # 获取初始化需要的ticket
     skey = ticket_dict.get('skey')
     pass_ticket = ticket_dict.get('pass_ticket')
-    base_url = "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?lang=zh_CN&pass_ticket={0}&r={" \
-               "1}&seq=0&skey={2}".format(pass_ticket, time.time() * 1000, skey)
+    base_url = "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?lang=" \
+               "zh_CN&pass_ticket={0}&r={1}&seq=0&skey={2}".format(pass_ticket, time.time() * 1000, skey)
     r1 = requests.get(base_url, cookies=ticket_dict)
     contact_dict = json.loads(r1.content)
     # for item in contact_dict["MemberList"]:
@@ -107,5 +108,38 @@ def contact_all():
     return render_template('contact_all.html', contact_dict=contact_dict)
 
 
+@app.route('/send_msg', methods=['GET', 'POST'])
+def send_msg():
+    if request.method == 'POST':
+        return 'what are you 弄啥呢'
+    else:
+        to = request.args.get('to')
+        content = request.args.get('content')
+        print(to, content)
+        ticket_dict = session.get('ticket_dict')  # 获取初始化需要的ticket
+        url = 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg?pass_ticket={0}'.format(ticket_dict.get('pass_ticket'))
+        ctime = time.time() * 1000
+        form_data = {
+            'BaseRequest': {
+                'DeviceID': "e749599289935070",
+                "Sid": ticket_dict.get('wxsid'),
+                "Uin": ticket_dict.get('wxuin'),
+                "Skey": ticket_dict.get('skey'),
+            },
+            'Msg': {
+                'ClientMsgId': ctime,
+                'Content': content,
+                'FromUserName': session.get('current_user_info')['NickName'],
+                'LocalID': ctime,
+                'ToUserName': to,
+                'Type': 1,  # 文本
+            },
+            'Scene': 0,
+        }
+        r1 = requests.post(url=url, data=json.dumps(form_data), cookies=ticket_dict)
+        print(r1.text)
+        return r1.text
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="192.168.1.75")
