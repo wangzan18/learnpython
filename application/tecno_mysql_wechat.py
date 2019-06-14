@@ -16,21 +16,26 @@ headers = {'Content-Type': 'application/json;charset=utf-8'}
 
 
 def get_data():
+    """ 连接数据，获取数据
+
+    :return: 返回查询的数据
+    """
     conn = pymysql.Connect(
-    host='127.0.0.1',
-    port=3306,
-    user='root',
-    passwd='wzlinux18',
-    db='tecno',
-    charset='utf8'
+        host='127.0.0.1',
+        port=3306,
+        user='root',
+        passwd='wzlinux18',
+        db='tecno',
+        charset='utf8'
     )
     cursor = conn.cursor()
     cursor.execute("select count(1) from tecno.tc_user_info;")
-    alldata = cursor.fetchone()
+    all_data = cursor.fetchone()
     cursor.execute("SELECT count(1) FROM tecno.tc_user_info WHERE TO_DAYS(NOW()) - TO_DAYS(rec_update_time) = 1;")
-    yesdata = cursor.fetchone()
+    yes_data = cursor.fetchone()
     conn.close()
-    return alldata[0], yesdata[0]
+    return all_data[0], yes_data[0]
+
 
 def get_token(corp_id, corp_secret):
     """获取微信接口token
