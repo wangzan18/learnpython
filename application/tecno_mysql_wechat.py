@@ -10,8 +10,8 @@ import json
 import datetime
 
 # 微信公众号上应用的CropID和Secret
-corpid = 'wwb6fffa8f234dd513'
-corpsecret = 'xAQHWhqt92NuoVAsQra6-bDuT2rIWAAYo1ghjMGfRDU'
+corp_id = 'wwb6fffa8f234dd513'
+corp_secret = 'xAQHWhqt92NuoVAsQra6-bDuT2rIWAAYo1ghjMGfRDU'
 headers = {'Content-Type': 'application/json;charset=utf-8'}
 
 
@@ -37,10 +37,8 @@ def get_data():
     return all_data[0], yes_data[0]
 
 
-def get_token(corp_id, corp_secret):
+def get_token():
     """获取微信接口token
-    :param corp_id: 企业的id
-    :param corp_secret: 应用的secret
     :return: 返回获取到的token
     """
     url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s" % (corp_id, corp_secret)
@@ -54,7 +52,7 @@ def send_wechat(title, message):
     :param title: 消息的标题
     :param message: 消息的内容
     """
-    access_token = get_token(corpid, corpsecret)
+    access_token = get_token()
 
     purl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s" % access_token
 
