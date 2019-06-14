@@ -73,7 +73,7 @@ def send_wechat(title, message):
     print(requests.post(purl, data=json.dumps(wechat_msg), headers=headers).content)
 
 
-def send_dmp(data):
+def send_msg(data):
     """制定要给微信发送的消息
     :param data: 函数get_data，数据库查询出来的数据，是列表形式。
     """
@@ -86,4 +86,4 @@ def send_dmp(data):
 
 
 if __name__ == '__main__':
-    send_dmp(get_data())
+    send_msg(get_data())
