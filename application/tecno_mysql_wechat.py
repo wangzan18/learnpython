@@ -28,13 +28,17 @@ def get_data():
         db='tecno',
         charset='utf8'
     )
+    # 简便写法 conn = pymysql.connect("localhost","testuser","test123","TESTDB" )
     cursor = conn.cursor()
-    cursor.execute("select count(1) from tecno.tc_user_info;")
-    all_data = cursor.fetchone()
-    cursor.execute("SELECT count(1) FROM tecno.tc_user_info WHERE TO_DAYS(NOW()) - TO_DAYS(rec_update_time) = 1;")
-    yes_data = cursor.fetchone()
+    try:
+        cursor.execute("select count(1) from tecno.tc_user_info;")
+        all_data = cursor.fetchone()
+        cursor.execute("SELECT count(1) FROM tecno.tc_user_info WHERE TO_DAYS(NOW()) - TO_DAYS(rec_update_time) = 1;")
+        yes_data = cursor.fetchone()
+        return all_data[0], yes_data[0]
+    except:
+        print("Error: unable to fetch data")
     conn.close()
-    return all_data[0], yes_data[0]
 
 
 def get_token():
