@@ -67,13 +67,9 @@ def lambda_handler(event, context):
     if region is None:
         url_begining = "https://s3.amazonaws.com/"
     else:
-        url_begining = "https://s3-" + str(region) + ".amazonaws.com/" \
- \
-                url = url_begining \
-                      + str(os.environ['BUCKET_NAME']) \
-                      + "/" \
-                      + str(postId) \
-                      + ".mp3"
+        url_begining = "https://s3-" + str(region) + ".amazonaws.com/"
+
+    url = url_begining + str(os.environ['BUCKET_NAME']) + "/" + str(postId) + ".mp3"
 
     # Updating the item in DynamoDB
     response = table.update_item(
