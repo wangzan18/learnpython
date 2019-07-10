@@ -1,13 +1,13 @@
 <html>
-  <head><title>WZLINUX - Polly Study Notes Generator</title>
+  <head><title>wzlinux Audio</title>
     <link rel="stylesheet" href="styles.css">
 
   </head>
-  <body><h1>Hello wzlinux!</h1>
+  <body><h1 align="center">欢迎来到小水滴语音合成窗口</h1>
 
     <div id="content">
 
-      Voice:
+      <b><font size="3" face="微软雅黑" color=black>请选择你想听到的声音:</font></b>
 
       <select id="voiceSelected">
         <option value="Ivy">Ivy [English - American]</option>
@@ -58,7 +58,7 @@
 
       </select>
 
-      <input type="submit" value="Say it!" id="sayButton" class="buttons">
+      <input type="submit" value="语音转换" id="sayButton" class="buttons">
 
       <span id="postIDreturned"></span>
     </br></br>
@@ -67,7 +67,7 @@
     <span id="charCounter">Characters: 0</span>
 
     </br></br></br></br>
-      Provide post ID which you want to retrieve: <input type="text" id="postId"> <input type="submit" class="buttons" value="Search" id="searchButton">
+      <b>填写 postId 进行检索: </b><input type="text" id="postId"> <input type="submit" class="buttons" value="搜索" id="searchButton">
       <br/>
     </div>
 
@@ -94,6 +94,6 @@
 
 
     <script src="scripts.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.min.js"></script>
   </body>
 </html>
