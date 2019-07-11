@@ -5,6 +5,7 @@ import uuid
 
 def lambda_handler(event, context):
     recordId = str(uuid.uuid4())
+    ctime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     voice = event["voice"]
     text = event["text"]
     # print('Generating new DynamoDB record, with ID:' + recordId)
@@ -19,7 +20,8 @@ def lambda_handler(event, context):
             'id': recordId,
             'text': text,
             'voice': voice,
-            'status': 'PROCESSING'
+            'status': 'PROCESSING',
+            'ctime': ctime
         }
     )
 

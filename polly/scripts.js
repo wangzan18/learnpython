@@ -1,4 +1,4 @@
-var API_ENDPOINT = "YOUR-API-GATEWAY-HERE"
+var API_ENDPOINT = "https://mq9ah6iec6.execute-api.us-east-1.amazonaws.com/dev"
 
 document.getElementById("sayButton").onclick = function(){
 
@@ -47,6 +47,7 @@ document.getElementById("searchButton").onclick = function(){
 								<td>" + data['voice'] + "</td> \
 								<td>" + data['text'] + "</td> \
 								<td>" + data['status'] + "</td> \
+								<td>" + data['ctime'] + "</td> \
 								<td>" + player + "</td> \
 								</tr>");
 	        });

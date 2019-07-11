@@ -5,6 +5,12 @@ from boto3.dynamodb.conditions import Key
 
 
 def lambda_handler(event, context):
+    """
+     消息格式：https://docs.aws.amazon.com/zh_cn/lambda/latest/dg/with-sns.html
+    :param event:
+    :param context:
+    :return:
+    """
     postId = event["Records"][0]["Sns"]["Message"]
 
     # Retrieving information about the post from DynamoDB table
