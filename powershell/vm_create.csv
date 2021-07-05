@@ -1,0 +1,2 @@
+vcip,name,IP,mask,gateway,networkname,cpu,memory,disk,datastore,template,osspec,pool,admin,project
+10.250.100.102,(101.179)wangzan-test,10.250.101.179,255.255.255.0,10.250.101.254,VLAN_10.250.101.0/24,8,8,200,vsanDatastore,centos7.5-template,centos7.5,wangzan,王赞,ITSM1
