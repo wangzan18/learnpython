@@ -24,7 +24,7 @@ foreach($vms in $VMsList)
     $admin=$vms.admin # 负责人
 
     # 连接VC
-    Connect-VIServer -Server $vcip -Protocol https -User "administrator@vsphere.local" -Password "Admin@123" 
+    Connect-VIServer -Server $vcip -Protocol https -User "xxxxxx" -Password "xxxx" 
 
     $getvm = Get-VM $vmName -ErrorAction "SilentlyContinue" # 集群查找是否有此名称的主机
     
