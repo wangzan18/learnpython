@@ -16,3 +16,4 @@ with connection.cursor() as cursor:
     cursor.execute(sql)
     result = cursor.fetchall()
     print(result)
+    
